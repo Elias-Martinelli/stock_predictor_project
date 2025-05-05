@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+
+  stock-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: stock_predictor_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  stock-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stock_dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

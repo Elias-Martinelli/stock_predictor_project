@@ -1,0 +1,22 @@
+# Dockerfile.api – aktualisiert für dein Projekt (FastAPI)
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# System libs (z.B. für Tensorflow, Pandas, etc.)
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["uvicorn", "scripts.fastapi_server:app", "--host", "0.0.0.0", "--port", "8000"]

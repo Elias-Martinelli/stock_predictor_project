@@ -1,0 +1,8 @@
+scripts/__pycache__/
+stock_predictor/__pycache__/
+stock_predictor.egg-info/
+*.pyc
+.env
+.envrc
+.venv/
+.ipynb_checkpoints/
