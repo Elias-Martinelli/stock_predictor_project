@@ -1,3 +1,5 @@
+# stock_predictor/model_building.py
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, LSTM, Dense
 import os

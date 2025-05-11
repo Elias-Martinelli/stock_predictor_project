@@ -1,3 +1,5 @@
+# stock_predictor/training_pipeline.py
+
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 

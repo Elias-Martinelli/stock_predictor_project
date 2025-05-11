@@ -1,157 +1,258 @@
-# 📈 Stock Predictor ML System
-
-Willkommen zum Stock Prediction Machine Learning System!
-Dieses Projekt nutzt modernste Machine Learning Techniken, um Aktienkurse vorherzusagen, Modelle live zu serven und Monitoring anzubieten.
+# 📈 Stock Predicto
+Ein umfassendes, LSTM-basiertes Machine-Learning-Projekt zur Vorhersage von Aktienkursen. Die Anwendung kombiniert eine leistungsfähige REST-API mit einem interaktiven Streamlit-Dashboard und einem vollständig containerisierten Setup über Docker. Ziel ist es, historische Aktienkurse zu analysieren und zukunftsgerichtete Prognosen für verschiedene Unternehmen bereitzustellen.
 
 ---
 
 ## 📂 Projektstruktur
 
 ```bash
-stock_predictor/
-├── stock_predictor/          # Hauptpackage (Python-Module)
+📦 STOCK_PREDICTOR_PROJECT
+├── models/                      # Gespeicherte Modelle (.keras, .h5, etc.)
+│   └── lstm_msft.keras
+│
+├── notebooks/                  # Explorative Jupyter Notebooks
+│   ├── exploration.ipynb
+│   └── setup.ipynb
+│
+├── scripts/                    # Startskripte für Server, Dashboard, etc.
+│   ├── fastapi_server.py       # FastAPI REST-API
+│   └── streamlit_dashboard.py  # Streamlit-Frontend
+│
+├── stock_predictor/            # Hauptmodul mit Kernfunktionen
 │   ├── __init__.py
 │   ├── data_loader.py
-│   ├── feature_engineering.py
-│   ├── training_pipeline.py
 │   ├── model_building.py
-│   ├── hyperparameter_tuning_bayes.py
-│   ├── backtesting.py
-│   ├── metrics.py
-│   ├── live_data.py
-│   ├── ticker_crawler.py
-├── scripts/                  # Steuerungsskripte
-│   ├── run_multi_pipeline_parallel.py
-│   ├── fastapi_server.py
-│   ├── streamlit_dashboard.py
-├── data/                      # Roh- und bearbeitete Daten
-├── models/                    # Trainierte Modelle (.h5) und Scaler (.pkl)
-├── tuner_results/             # Hyperparameter Tuning Ergebnisse
-├── logs/                      # Fehler- und Eventlogs
-├── requirements.txt           # Python-Abhängigkeiten
-├── Dockerfile                 # Docker für Training & Dashboard
-├── Dockerfile.api             # Docker für FastAPI Server
-├── docker-compose.yml         # Alles auf einmal starten
-├── README.md                  # Projektdokumentation
-├── .envrc                     # direnv Setup
-├── .python-version            # pyenv Setup
+│   └── training_pipeline.py
+│
+├── tests/                      # Unit Tests
+│   ├── test_data_loader.py
+│   └── test_model_building.py
+│
+├── .env                        # Umgebungsvariablen (nicht tracken!)
+├── .gitignore                  # Dateien/Ordner, die Git ignorieren soll
+├── .python-version             # Python-Version für pyenv
+│
+├── autotest.sh                 # Automatisierungsskript für Tests, Linting, etc.
+├── docker_deploy.sh            # Optionales Deployment-Skript
+├── docker-compose.yml          # Mehrere Docker-Container definieren
+├── Dockerfile                  # Container für das Projekt
+├── Dockerfile.api              # Separater Container für API-Server (optional)
+│
+├── Makefile                    # Automatisierung über make
+├── README.md                   # Hauptdokumentation des Projekts
+├── requirements.txt            # Python-Abhängigkeiten
+├── setup.py                    # Setup-Skript für Package-Installation
+├── setup_project.sh            # Setup-Automatisierung (z. B. venv, deps)
+
 ```
 
 
-## 🚀 Setup Anleitung
-
-Hier die genaue Reihenfolge, um das Projekt vollständig und korrekt aufzusetzen:
-
 ---
 
-### ▶️ 1. Klonen oder Herunterladen des Projekts
+## ⚙️ Setup & Installation
+
+### 1. Lokale Umgebung mit pyenv + direnv
 
 ```bash
-git clone https://github.com/dein-repo/stock_predictor_project.git
-cd stock_predictor_project
+pyenv install 3.10.6
+pyenv virtualenv 3.10.6 stock_predictor_env
+pyenv activate stock_predictor_env
 ```
 
----
-
-### ▶️ 2. Setup-Skript ausführbar machen
+### 2. Projekt einrichten
 
 ```bash
 chmod +x setup_project.sh
-```
-
----
-
-### ▶️ 3. Setup-Skript ausführen
-
-```bash
 ./setup_project.sh
 ```
 
-**Was passiert hier:**
-- Erstellt ein virtuelles Environment (`stock_predictor_env`) mit pyenv
-- Verlinkt die Umgebung automatisch mit dem Projektordner (.python-version)
-- Erstellt eine .envrc Datei für automatische Aktivierung mit direnv
-- Installiert alle Packages aus requirements.txt
+> Voraussetzungen: `pyenv`, `pyenv-virtualenv`, `direnv` (empfohlen zur automatischen Aktivierung der Umgebung)
 
----
-
-
-### ▶️ 4. Docker login
+### 3. Manuelle Abhängigkeiten (optional)
 
 ```bash
-docker login
+pip install -r requirements.txt
 ```
-➔ Gib deinen DockerHub Username und Passwort ein.
-(Hast du noch keinen Account? Kostenlos erstellen: https://hub.docker.com/)
 
-Danach kann Docker Images von DockerHub korrekt ziehen.
+> Tipp: Verwende `pip freeze > requirements.txt` zur Aktualisierung der Abhängigkeiten.
 
 ---
 
-### ▶️ 5. Docker-Deploy-Skript ausführbar machen
+## 🚀 Schnellstart
+
+### Starte REST API (FastAPI-Server):
 
 ```bash
-chmod +x docker_deploy.sh
+make fastapi
 ```
 
----
+Zugriff: [http://localhost:8000](http://localhost:8000)
 
-### ▶️ 6. Docker Deployment starten
+### Starte Dashboard (Streamlit-Oberfläche):
 
 ```bash
-./docker_deploy.sh
+make streamlit
 ```
 
-**Was passiert hier:**
-- Beendet alte Docker-Container (falls vorhanden)
-- Baut neue Docker-Images (FastAPI + Streamlit)
-- Startet alle Services im Hintergrund
-- FastAPI verfügbar auf http://localhost:8000
-- Streamlit Dashboard verfügbar auf http://localhost:8501
+Zugriff: [http://localhost:8501](http://localhost:8501)
+
+> Alternativ kannst du die Docker-Variante nutzen: `make docker`
 
 ---
 
-### ▶️ 7. Testen der API
+## 🛋️ REST API Dokumentation (FastAPI)
 
-Starte API Tests lokal:
+### Base URL:
+
+`http://localhost:8000/docs`
+
+### Verfügbare Endpoints:
+
+| Methode | Pfad       | Beschreibung                       |
+| ------- | ---------- | ---------------------------------- |
+| GET     | `/`        | Health Check                       |
+| POST    | `/predict` | Kursprognose für die nächsten Tage |
+
+### Beispiel: Vorhersage-Anfrage
+
+```json
+{
+  "ticker": "AAPL",
+  "days": 5
+}
+```
+
+### Beispiel: API-Antwort
+
+```json
+{
+  "ticker": "AAPL",
+  "predictions": [172.34, 173.01, 173.58, 174.22, 174.91]
+}
+```
+
+> Der API-Key wird automatisch aus der `.env` geladen.
+
+---
+
+## 🔎 Interaktives Dashboard (Streamlit)
+
+### Features:
+
+* 🔑 API-Key Auswahl & Eingabe (aus .env oder manuell)
+* 📅 Auswahl von Tickersymbolen (AAPL, MSFT, IBM etc.)
+* 📊 Visualisierung von geladenen Kursdaten
+* 🔄 Skalierung & Sequenzbildung für LSTM-Training
+* 🚀 Live-Modelltraining mit Keras-Ausgabe
+* 📈 Visualisierung von Vorhersage vs. Realwerten
+* 🗃️ Modell speichern als `.keras`
+
+### Start:
 
 ```bash
-python test_api_requests.py
+streamlit run scripts/streamlit_dashboard.py
 ```
 
-**Was passiert hier:**
-- Testet die `/predict-live` und `/predict` Endpoints automatisch
-- Holt Live-Daten oder sendet Dummy-Daten
-- Gibt JSON-Antworten der API zurück
+> Hinweis: Für Visualisierung wird `matplotlib` verwendet (bereits installiert).
 
 ---
 
-## 📈 Zusammenfassung der Effekte:
+## 🚧 Docker & Deployment
 
-| Schritt | Wirkung |
-|--------|---------|
-| setup_project.sh | Saubere Umgebungserstellung + Paketinstallation |
-| docker_deploy.sh | Vollständiges Docker Deployment der API und Monitoring |
-| API Test | Verifizierung der korrekten Funktionsweise der Prediction API |
+### Lokales Multi-Service Deployment:
+
+```bash
+make docker
+```
+
+### Container-Dienste:
+
+| Dienst    | Port | Beschreibung             |
+| --------- | ---- | ------------------------ |
+| stock-api | 8000 | REST API mit FastAPI     |
+| dashboard | 8501 | Streamlit Web-Oberfläche |
+
+### Docker Einzelstart (optional):
+
+```bash
+docker build -f Dockerfile.api -t stock-api .
+docker run -p 8000:8000 stock-api
+```
+
+> Nutze `docker-compose logs` oder `docker ps`, um Status und Logs zu prüfen.
 
 ---
 
-## 🔥 Voraussetzungen
+## 🛠️ Automatisierung via Makefile
 
-- Python 3.10.6
-- pyenv installiert
-- direnv installiert
-- Docker + Docker Compose installiert
-
----
-
-## ⚡ Hinweise
-
-- `.python-version` und `.envrc` Dateien werden automatisch erstellt.
-- Wenn pyenv oder direnv nicht installiert sind, muss dies manuell nachgeholt werden.
-- Docker öffnet Ports 8000 (API) und 8501 (Dashboard).
-
----
+```bash
+make install       # Python-Abhängigkeiten installieren
+make test          # Tests mit pytest starten
+make lint          # Code-Qualität prüfen (flake8)
+make format        # Code formatieren mit black
+make docker        # Docker Deployment starten
+make autotest      # Ausführen von autotest.sh (CI-Test)
 ```
 
 ---
+
+## 📅 Tests & Qualitätssicherung
+
+### Manuelle Ausführung:
+
+```bash
+pytest tests/
+```
+
+oder per
+
+```bash
+make test
+```
+
+### Abgedeckte Komponenten:
+
+* `fetch_alpha_vantage`: Datenbeschaffung von Alpha Vantage API
+* `build_and_train_model`: Modellarchitektur und Trainingslogik
+* `predict_and_inverse`: Vorhersage + Invers-Transformation
+
+### CI-Vorbereitung via `autotest.sh`
+
+* Linting mit `flake8`
+* Formatierung mit `black`
+* Testlauf mit `pytest`
+* Exit-Codes für CI-kompatibles Verhalten
+
+---
+
+## 💼 Projektbeschreibung
+
+**"Stock Predictor"** ist ein vollständiges Machine-Learning-Projekt zur Prognose von Aktienkursen. Es basiert auf historischen Kursdaten, verarbeitet diese in einer LSTM-Sequenzstruktur, und bietet interaktive sowie API-basierte Schnittstellen zur Nutzung der Vorhersagemodelle.
+
+### Technologiestack:
+
+* Programmiersprache: **Python 3.10**
+* ML: **TensorFlow**, **Keras**, **scikit-learn**
+* API: **FastAPI**
+* GUI: **Streamlit**
+* Containerisierung: **Docker**, **Docker Compose**
+* Automatisierung: **Makefile**, **autotest.sh**, **pyenv**, **direnv**
+
+### Besonderheiten:
+
+* `.env`-basierte Konfiguration für sichere API-Key-Verwaltung
+* Reproduzierbarer Environment-Aufbau via `setup_project.sh`
+* Modularisierte Python-Pakete mit `setup.py`
+* Separater FastAPI- und Streamlit-Dienst
+* Getrennte Dockerfiles für Frontend/Backend
+* Entwicklungsfreundlich durch `make`, `pytest` und `black`
+
+---
+
+## 👥 Credits & Dank
+
+* **Autor**: Elias Martinelli
+* **Projektkontext**: Kursarbeit für das Modul *\[Modulname einsetzen]* bei *\[Dozent/in eintragen]*
+* **Datenquelle**: [Alpha Vantage](https://www.alphavantage.co/) (kostenlose Finanzdaten-API)
+
+> Besonderer Dank an die Lehrveranstaltung und Kommiliton\:innen für das Peer Review und Feedback!

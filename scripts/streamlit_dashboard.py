@@ -1,3 +1,5 @@
+# scripts/streamlit_dashboard.py
+
 from dotenv import load_dotenv
 import os
 from stock_predictor.data_loader import fetch_alpha_vantage
