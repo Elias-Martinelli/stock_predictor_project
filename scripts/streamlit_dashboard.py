@@ -85,9 +85,9 @@ if st.button("📥 Daten laden"):
         st.error(f"❌ Fehler beim Laden: {str(e)}")
 
 
-#####################
+###########################
 ###  Split Data Button  ###
-#####################
+###########################
 
 
 from stock_predictor.training_pipeline import split_data, scale_data
