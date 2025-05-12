@@ -225,6 +225,19 @@ make test
 
 ---
 
+## 📓 Jupyter Notebooks
+
+Im Ordner `notebooks/` befinden sich zwei zentrale Dateien:
+
+* **`setup.ipynb`**
+  Dient zum schnellen Laden und Testen der wichtigsten Imports und Bibliotheken.
+
+* **`exploration.ipynb`**
+  Zum experimentell mit Daten arbeiten, Modelle analysieren oder spezifische Vorverarbeitungsschritte testen. Ideal für schnelles Prototyping ausserhalb der API- oder Streamlit-Pipeline.
+
+> 💡 Notebooks helfen besonders beim Debuggen, Visualisieren von Daten und Validieren einzelner Funktionsblöcke.
+
+---
 ## 💼 Projektbeschreibung
 
 **"Stock Predictor"** ist ein vollständiges Machine-Learning-Projekt zur Prognose von Aktienkursen. Es basiert auf historischen Kursdaten, verarbeitet diese in einer LSTM-Sequenzstruktur, und bietet interaktive sowie API-basierte Schnittstellen zur Nutzung der Vorhersagemodelle.

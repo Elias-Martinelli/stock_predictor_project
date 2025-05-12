@@ -1,5 +1,6 @@
 scripts/__pycache__/
 stock_predictor/__pycache__/
+tests/__pycache__/
 stock_predictor.egg-info/
 *.pyc
 .env
